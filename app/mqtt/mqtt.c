@@ -96,11 +96,19 @@ LOCAL void mqtt_publish(char *topic, uint8_t topic_length, char *payload, uint8_
 
 LOCAL void mqtt_task(void *pvParameters)
 {
+	// Put MAC from STATION_IF to string and generate Topic path
+	uint8_t mac[6];
+	char mac_string[17]; char topic[25];
+	wifi_get_macaddr(0x00, mac);
+	sprintf(mac_string, "%X:%X:%X:%X:%X:%X", mac[5], mac[4], mac[3], mac[2], mac[1], mac[0]);
+	sprintf(topic, "esp/%s", mac_string);
+
+	connectMessage[17] = mac[0];
+
 	mqtt_create_socket();
 	mqtt_connect();
 
 	while (1) {
-		char topic[] = "a/b";
 		char payload[] = "Test!";
 		mqtt_publish(topic, strlen(topic), payload, strlen(payload));
 
