@@ -24,19 +24,22 @@ uint8_t connectMessage[] = {0x10 //Connect
   , 0x4d //M
   , 0x70 //P .. Let's say client ID = MP
 };
+#define connectMessageLength 18
 
 uint8_t publishMessage[] = { 0x30 //Publish with QOS 0
   , 0x05 + 0x05 //Remaining length
-  , 0x00 //MSB
+  , 0x00 //MSBre
   , 0x03 //3 bytes of topic
   , 0x61 //a
   , 0x2F ///
   , 0x62 //b (a/b) is the topic
   , 0x48, 0x45 , 0x4c , 0x4c, 0x4f //HELLO is the message
 };
+#define publishMessageLength 12
 
 uint8_t disconnectMessage[] = { 0x0E //Disconnect
     , 0x00
 };
+#define disconnectMessageLength 2
 
 #endif

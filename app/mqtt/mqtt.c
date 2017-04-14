@@ -35,7 +35,7 @@ LOCAL void mqtt_create_socket(void) {
 }
 
 LOCAL void mqtt_connect(void) {
-	if( send(socket_desc , connectMessage , 18, 0) < 0)
+	if( send(socket_desc , connectMessage , connectMessageLength, 0) < 0)
 	{
 		puts("Connect message failed");
 		return;
@@ -54,7 +54,7 @@ LOCAL void mqtt_connect(void) {
 }
 
 LOCAL void mqtt_disconnect(void) {
-	if( send(socket_desc , disconnectMessage , 2 , 0) < 0)
+	if( send(socket_desc , disconnectMessage , disconnectMessageLength , 0) < 0)
 	{
 	puts("Disconnect message failed");
 	return;
@@ -63,7 +63,7 @@ LOCAL void mqtt_disconnect(void) {
 }
 
 LOCAL void mqtt_publish(void) {
-	if( send(socket_desc , publishMessage , 12 , 0) < 0)
+	if( send(socket_desc , publishMessage , publishMessageLength , 0) < 0)
 	{
 	puts("Push message failed");
 	return;
@@ -79,7 +79,7 @@ LOCAL void mqtt_task(void *pvParameters)
 	while (1) {
 		mqtt_publish();
 
-		vTaskDelay(100 / portTICK_RATE_MS);
+		vTaskDelay(500 / portTICK_RATE_MS);
 	}
 
 	vTaskDelete(NULL);
