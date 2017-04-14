@@ -62,13 +62,36 @@ LOCAL void mqtt_disconnect(void) {
 	puts("Disconnect message Send\n");
 }
 
-LOCAL void mqtt_publish(void) {
-	if( send(socket_desc , publishMessage , publishMessageLength , 0) < 0)
-	{
-	puts("Push message failed");
-	return;
+LOCAL void mqtt_publish(char *topic, uint8_t topic_length, char *payload, uint8_t payload_length) {
+	uint8_t mqtt_publish_buffer[50];
+
+	// MQTT Control Packet type (3), No DUP, QOS 0, No Retain
+	mqtt_publish_buffer[0] = 0x30;
+
+	// Calculate length of topic + payload + topic length byte + payload msb length byte
+	uint16_t data_length = topic_length + payload_length + 1 + 1;
+
+	mqtt_publish_buffer[1] = data_length & 0xFF;
+	mqtt_publish_buffer[2] = (data_length & 0xFF00) >> 8;
+
+	mqtt_publish_buffer[3] = topic_length;
+
+	memcpy(mqtt_publish_buffer + 4, topic, topic_length);
+	memcpy(mqtt_publish_buffer + topic_length + 4, payload, payload_length);
+
+	printf("topic length: %d, payload length: %d\n", topic_length, payload_length);
+
+	int i = 0;
+	for(i = 0; i <= topic_length + payload_length + 3; i++) {
+		printf("%x ", mqtt_publish_buffer[i]);
 	}
-	puts("Push message Send\n");
+
+	if( send(socket_desc, mqtt_publish_buffer, topic_length + payload_length + 4, 0) < 0)
+	{
+		puts("Push message failed");
+		return;
+	}
+		puts("Push message Send\n");
 }
 
 LOCAL void mqtt_task(void *pvParameters)
@@ -77,7 +100,9 @@ LOCAL void mqtt_task(void *pvParameters)
 	mqtt_connect();
 
 	while (1) {
-		mqtt_publish();
+		char topic[] = "a/b";
+		char payload[] = "Test!";
+		mqtt_publish(topic, strlen(topic), payload, strlen(payload));
 
 		vTaskDelay(500 / portTICK_RATE_MS);
 	}
