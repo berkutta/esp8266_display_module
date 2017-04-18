@@ -70,4 +70,6 @@ void user_init(void)
     wifi_station_set_config(&config);
 
     wifi_station_connect();
+
+    oled_start();
 }
