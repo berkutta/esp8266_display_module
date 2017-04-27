@@ -31,6 +31,9 @@ LOCAL void mqtt_create_socket(void) {
 		return;
 	}
 
+	int fred = 1;
+	ioctlsocket(socket_desc,FIONBIO,&fred);
+
 	puts("Created socket to MQTT Server\n");
 }
 
@@ -45,6 +48,8 @@ LOCAL void mqtt_connect(void) {
 	{
 		puts("recv failed");
 	}
+
+	while( !(recv(socket_desc, connack , 4 , 0) > 0) );
 
 	if(connack[0] == 0x20 && connack[2] == 0x00) {
 		puts("Succesfully connected to MQTT Server\n");
@@ -79,11 +84,11 @@ LOCAL void mqtt_publish(char *topic, uint8_t topic_length, char *payload, uint8_
 	memcpy(mqtt_publish_buffer + 4, topic, topic_length);
 	memcpy(mqtt_publish_buffer + topic_length + 4, payload, payload_length);
 
-	printf("topic length: %d, payload length: %d\n", topic_length, payload_length);
+	//printf("topic length: %d, payload length: %d\n", topic_length, payload_length);
 
 	int i = 0;
 	for(i = 0; i <= topic_length + payload_length + 3; i++) {
-		printf("%x ", mqtt_publish_buffer[i]);
+		//printf("%x ", mqtt_publish_buffer[i]);
 	}
 
 	if( send(socket_desc, mqtt_publish_buffer, topic_length + payload_length + 4, 0) < 0)
@@ -91,7 +96,59 @@ LOCAL void mqtt_publish(char *topic, uint8_t topic_length, char *payload, uint8_
 		puts("Push message failed");
 		return;
 	}
-		puts("Push message Send\n");
+		//puts("Push message Send\n");
+}
+
+void mqtt_subscribe(char *topic, uint8_t topic_length) {
+	uint8_t mqtt_subscribe_buffer[50];
+
+	// https://image.slidesharecdn.com/mqtt-130828021319-phpapp01/95/mqtt-mq-telemetry-transport-for-message-queueing-19-638.jpg?cb=1465367894
+	// MQTT fixed header
+	mqtt_subscribe_buffer[0] = 0b10000010;
+	mqtt_subscribe_buffer[1] = 4 + 1 + strlen(topic);
+	// MQTT variable header
+	mqtt_subscribe_buffer[2] = 0x00;
+	mqtt_subscribe_buffer[3] = 10;
+	// MQTT list of topics
+	mqtt_subscribe_buffer[4] = (topic_length & 0xFF00) >> 8;
+	mqtt_subscribe_buffer[5] = topic_length & 0xFF;
+
+	memcpy(mqtt_subscribe_buffer + 6, topic, topic_length);
+	mqtt_subscribe_buffer[topic_length + 6] = 0x00;
+
+	if( send(socket_desc, mqtt_subscribe_buffer, topic_length + 7, 0) < 0)
+	{
+		puts("Subscribe failed");
+		return;
+	}
+}
+
+void mqtt_receive(void) {
+	uint8_t buffer[1500];
+	int err, length;
+
+	length = recv(socket_desc, buffer, sizeof(buffer), 0);
+
+	if( length > 0) {
+		printf("Received something, length: %d\n", length);
+		for(int i = 0; i <= length; i++) {
+			printf("%c ", buffer[i]);
+		}
+		printf("\n");
+	}
+}
+
+void mqtt_ping(void) {
+	uint8_t mqtt_ping_buffer[2];
+
+	mqtt_ping_buffer[0] = 0b11010000;
+	mqtt_ping_buffer[1] = 0x00;
+
+	if( send(socket_desc, mqtt_ping_buffer, 2, 0) < 0)
+	{
+		puts("Ping failed");
+		return;
+	}
 }
 
 LOCAL void mqtt_task(void *pvParameters)
@@ -108,11 +165,19 @@ LOCAL void mqtt_task(void *pvParameters)
 	mqtt_create_socket();
 	mqtt_connect();
 
+	mqtt_publish(topic, strlen(topic), "sali", strlen("sali"));
+
+	mqtt_subscribe("hoi/#", strlen("hoi/#"));
+
 	while (1) {
+		mqtt_ping();
+
 		char payload[] = "Test!";
 		mqtt_publish(topic, strlen(topic), payload, strlen(payload));
 
-		vTaskDelay(500 / portTICK_RATE_MS);
+		mqtt_receive();
+
+		vTaskDelay(100 / portTICK_RATE_MS);
 	}
 
 	vTaskDelete(NULL);

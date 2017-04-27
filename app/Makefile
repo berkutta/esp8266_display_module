@@ -15,7 +15,7 @@ TARGET = eagle
 #FLAVOR = release
 FLAVOR = debug
 
-SDK_PATH = /home/bmarty/esp/ESP8266_RTOS_SDK
+SDK_PATH = /home/benjamin/esp/ESP8266_RTOS_SDK
 BIN_PATH = ../bin
 
 FW_FILE1 = ../bin/eagle.flash.bin
@@ -32,7 +32,8 @@ SPECIAL_MKTARGETS=$(APP_MKTARGETS)
 SUBDIRS=    \
 	user    \
 	mqtt	\
-	driver
+	driver	\
+	oled
 
 endif # } PDIR
 
@@ -57,7 +58,8 @@ endif
 COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
 	driver/libdriver.a \
-	mqtt/libmqtt.a
+	mqtt/libmqtt.a \
+	oled/liboled.a
 
 LINKFLAGS_eagle.app.v6 = \
 	-L$(SDK_PATH)/lib        \
@@ -142,5 +144,5 @@ FORCE:
 
 flash :
 	make
-	($(ESPTOOL_PY) --port $(PORT) --baud 1500000 write_flash 0x00000 $(FW_FILE1) 0x20000 $(FW_FILE2))||(true)
+	($(ESPTOOL_PY) --port $(PORT) --baud 1500000 write_flash -fm dout 0x00000 $(FW_FILE1) 0x20000 $(FW_FILE2))||(true)
 	picocom $(PORT) --baud 115200

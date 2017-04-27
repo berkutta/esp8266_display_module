@@ -23,7 +23,7 @@ endif
 #   makefile at its root level - these are then overridden
 #   for a subtree within the makefile rooted therein
 #
-#DEFINES += 
+DEFINES += -std=gnu99
 
 #############################################################
 # Recursion Magic - Don't touch this!!
