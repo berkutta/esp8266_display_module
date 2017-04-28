@@ -130,11 +130,68 @@ void mqtt_receive(void) {
 	length = recv(socket_desc, buffer, sizeof(buffer), 0);
 
 	if( length > 0) {
-		printf("Received something, length: %d\n", length);
-		for(int i = 0; i <= length; i++) {
-			printf("%c ", buffer[i]);
-		}
-		printf("\n");
+    switch(buffer[0] & 0xF0) {
+      case CONNECT:
+        printf("Connect\n");
+        break;
+
+      case CONNACK:
+        printf("Connack\n");
+        break;
+
+      case PUBLISH:
+        printf("Publish\n");
+        break;
+
+      case PUBACK:
+        printf("Puback\n");
+        break;
+
+      case PUBREC:
+        printf("Pubrec\n");
+        break;
+
+      case PUBREL:
+        printf("Pubrel\n");
+        break;
+
+      case PUBCOMP:
+        printf("Pubcomp\n");
+        break;
+
+      case SUBSCRIBE:
+        printf("Subscribe");
+        break;
+
+      case SUBACK:
+        printf("Suback\n");
+        break;
+
+      case UNSUBSCRIBE:
+        printf("Unsubscribe");
+        break;
+
+      case UNSUBACK:
+        printf("Unsuback\n");
+        break;
+
+      case PINGREQ:
+        printf("Pingreq\n");
+        break;
+
+      case PINGRESP:
+        printf("Pingresp\n");
+        break;
+
+      case DISCONNECT:
+        printf("Disconnect\n");
+        break;
+    }
+
+    if((buffer[0] & 0b00110000) == 0x30) {
+      printf("Received PUBLISH mess hallo\n");
+    }
+
 	}
 }
 
@@ -173,6 +230,7 @@ LOCAL void mqtt_task(void *pvParameters)
 		mqtt_ping();
 
 		char payload[] = "Test!";
+    sprintf(payload, "%s, Uptime: %d", payload, system_get_time());
 		mqtt_publish(topic, strlen(topic), payload, strlen(payload));
 
 		mqtt_receive();
