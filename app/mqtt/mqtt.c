@@ -44,11 +44,6 @@ LOCAL void mqtt_connect(void) {
 		return;
 	}
 
-	if( recv(socket_desc, connack , 4 , 0) < 0)
-	{
-		puts("recv failed");
-	}
-
 	while( !(recv(socket_desc, connack , 4 , 0) > 0) );
 
 	if(connack[0] == 0x20 && connack[2] == 0x00) {
@@ -230,7 +225,7 @@ LOCAL void mqtt_task(void *pvParameters)
 		mqtt_ping();
 
 		char payload[] = "Test!";
-    sprintf(payload, "%s, Uptime: %d", payload, system_get_time());
+    sprintf(payload, "%s, Uptime: %lu", payload, system_get_time());
 		mqtt_publish(topic, strlen(topic), payload, strlen(payload));
 
 		mqtt_receive();
