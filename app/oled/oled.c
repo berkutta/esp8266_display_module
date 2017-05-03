@@ -344,6 +344,8 @@ void oled_clear_buffer() {
 void oled_write_buffer(uint8_t (*array)[16]) {
   uint8_t x, y, page_p_pos = 0, column_p_pos = 0, page = 0, page_buf = 0;
 
+	oled_x_y(0, 0);
+
   for(x = 0; x <= 127; x++) {
     for(y = 0; y <= 63; y++) {
       if(array[y][x/8] & (0x80 >> column_p_pos)) {
@@ -354,7 +356,11 @@ void oled_write_buffer(uint8_t (*array)[16]) {
     page_p_pos++;
     if(page_p_pos == 8) {
       page_p_pos = 0;
-      oled_x_y(x, (y/8));
+
+			#ifndef SSH1106
+			oled_x_y(x, (y/8));
+			#endif
+
       oled_write_data(page_buf);
       page_buf = 0;
       }

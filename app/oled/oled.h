@@ -1,6 +1,9 @@
 #ifndef OLED_H
 #define OLED_H
 
+#define SSD1306 1
+#define SSH1106 1
+
 #define SSD1306_address 0x3C
 
 //Defines for later use
@@ -53,4 +56,3 @@
 #define SSD1306_SWITCHCAPVCC 0x2
 
 #endif
-
