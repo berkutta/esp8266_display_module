@@ -17,6 +17,25 @@
 LOCAL uint8 m_nLastSDA;
 LOCAL uint8 m_nLastSCL;
 
+
+void i2c_master_sda_low_scl_low(void) {
+  GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, (1 << I2C_MASTER_SDA_GPIO) | (1 << I2C_MASTER_SCL_GPIO) );
+}
+
+void i2c_master_sda_low_scl_high(void) {
+  GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << I2C_MASTER_SDA_GPIO);
+  GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << I2C_MASTER_SCL_GPIO);
+}
+
+void i2c_master_sda_high_scl_low(void) {
+  GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << I2C_MASTER_SDA_GPIO);
+  GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << I2C_MASTER_SCL_GPIO);
+}
+
+void i2c_master_sda_high_scl_high(void) {
+  GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, (1 << I2C_MASTER_SDA_GPIO) | (1 << I2C_MASTER_SCL_GPIO) );
+}
+
 /******************************************************************************
  * FunctionName : i2c_master_setDC
  * Description  : Internal used function -
@@ -34,13 +53,15 @@ i2c_master_setDC(uint8 SDA, uint8 SCL)
     m_nLastSCL = SCL;
     ETS_INTR_LOCK();
     if ((0 == SDA) && (0 == SCL)) {
-        I2C_MASTER_SDA_LOW_SCL_LOW();
+      GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, (1 << I2C_MASTER_SDA_GPIO) | (1 << I2C_MASTER_SCL_GPIO) );
     } else if ((0 == SDA) && (1 == SCL)) {
-        I2C_MASTER_SDA_LOW_SCL_HIGH();
+      GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << I2C_MASTER_SDA_GPIO);
+      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << I2C_MASTER_SCL_GPIO);
     } else if ((1 == SDA) && (0 == SCL)) {
-        I2C_MASTER_SDA_HIGH_SCL_LOW();
+      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << I2C_MASTER_SDA_GPIO);
+      GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << I2C_MASTER_SCL_GPIO);
     } else {
-        I2C_MASTER_SDA_HIGH_SCL_HIGH();
+      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, (1 << I2C_MASTER_SDA_GPIO) | (1 << I2C_MASTER_SCL_GPIO) );
     }
     ETS_INTR_UNLOCK();
 }

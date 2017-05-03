@@ -3,6 +3,7 @@
 
 #include "esp8266/pin_mux_register.h"
 #include "esp8266/gpio_register.h"
+
 // SCL = MTMS = 14
 // SDA = MTDI = 12
 #define I2C_MASTER_SCL_MUX PERIPHS_IO_MUX_MTMS_U
