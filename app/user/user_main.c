@@ -1,5 +1,6 @@
 #include "esp_common.h"
 #include "user_config.h"
+#include "../oled/oled.h"
 
 uint32 user_rf_cal_sector_set(void)
 {
@@ -42,6 +43,7 @@ void ICACHE_FLASH_ATTR wifi_event_handler_cb(System_Event_t *event)
             printf("Disconnected!\n");
             break;
         case EVENT_STAMODE_CONNECTED:
+            myoledstatus = oled_display_cloud;
             printf("Connected!\n");
             break;
         case EVENT_STAMODE_GOT_IP:
@@ -59,6 +61,9 @@ void user_init(void)
 
     os_printf("SDK version:%s\n", system_get_sdk_version());
 
+    myoledstatus = oled_connecting_wifi;
+    oled_start();
+
     wifi_set_opmode(STATION_MODE);
 
     wifi_set_event_handler_cb(wifi_event_handler_cb);
@@ -70,6 +75,4 @@ void user_init(void)
     wifi_station_set_config(&config);
 
     wifi_station_connect();
-
-    oled_start();
 }
