@@ -5,6 +5,9 @@ This software is a completly stupid proof of concept to just get MQTT running on
 
 It currently can't do many things. It connect's to the WiFi in station mode, waits until it get's an IP and then starts the task to publish messages to the MQTT Broker.
 
+In a seperate task it drives the OLED Display. So this Software works quite great with my [Display Module](https://www.tindie.com/products/kilobyte/oled-esp8285-module/): 
+![Module](https://kilobyte.ch/stuff/tindie/OLED_ESP8285_Module/display_module_case_small.png "Module")
+
 
 Usage
 =================
