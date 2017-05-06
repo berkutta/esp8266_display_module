@@ -1,13 +1,15 @@
-ESP8266 MQTT
+ESP8266 Display Module
 ================
 
-This software is a completly stupid proof of concept to just get MQTT running on a ESP8266 with the RTOS on an own sofware implementation.
+This software is primarly made for my [OLED Display Module](https://www.tindie.com/products/kilobyte/oled-esp8285-module/): . It currently just displays it's status on the display and send's some status informations to a predefined MQTT Server.
 
-It currently can't do many things. It connect's to the WiFi in station mode, waits until it get's an IP and then starts the task to publish messages to the MQTT Broker.
+My goal is to get a full CLI based system over MQTT. The plan is to be able to e.g. set GPIO's or drawing things on the OLED Displays with simple commands over MQTT.
 
-In a seperate task it drives the OLED Display. So this Software works quite great with my [Display Module](https://www.tindie.com/products/kilobyte/oled-esp8285-module/): 
 ![Module](https://kilobyte.ch/stuff/tindie/OLED_ESP8285_Module/display_module_case_small.png "Module")
 
+The whole software is designed to run as fast as possible. Thus the whole system has absolute no issues with spamming the MQTT Server and changing the Display at the same time:
+
+![fast](https://raw.githubusercontent.com/berkutta/esp8266_display_module/master/images/system_speed.gif "fast")
 
 Usage
 =================
