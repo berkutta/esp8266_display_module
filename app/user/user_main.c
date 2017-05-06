@@ -1,6 +1,6 @@
 #include "esp_common.h"
 #include "user_config.h"
-#include "../oled/oled.h"
+#include "../display/display.h"
 
 uint32 user_rf_cal_sector_set(void)
 {
@@ -61,8 +61,9 @@ void user_init(void)
 
     os_printf("SDK version:%s\n", system_get_sdk_version());
 
-    myoledstatus = oled_connecting_wifi;
-    oled_start();
+    //myoledstatus = oled_connecting_wifi;
+    //oled_start();
+    display_start();
 
     wifi_set_opmode(STATION_MODE);
 

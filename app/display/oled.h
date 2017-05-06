@@ -1,22 +1,14 @@
 #ifndef OLED_H
 #define OLED_H
 
-typedef enum oled_status {
-  oled_connecting_wifi,
-  oled_display_cloud,
-  oled_display_chip,
-} oled_status_t;
-
-oled_status_t myoledstatus;
-
-
 #define SSD1306 1
 #define SSH1106 1
 
 #define SSD1306_address 0x3C
 
 //Defines for later use
-#define SSD1306_LCDWIDTH                  128
+#define SSD1306_LCDWIDTH            128
+#define SSD1306_LCDHEIGHT           64
 
 //  Fundamental #defines
 #define SSD1306_SETCONTRAST 0x81
@@ -63,5 +55,7 @@ oled_status_t myoledstatus;
 
 #define SSD1306_EXTERNALVCC 0x1
 #define SSD1306_SWITCHCAPVCC 0x2
+
+uint8_t SSD1306_buffer[SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8];
 
 #endif
