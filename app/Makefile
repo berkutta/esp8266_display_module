@@ -15,7 +15,7 @@ TARGET = eagle
 #FLAVOR = release
 FLAVOR = debug
 
-SDK_PATH = /home/benjamin/esp/ESP8266_RTOS_SDK
+SDK_PATH = /home/bmarty/esp/ESP8266_RTOS_SDK
 BIN_PATH = ../bin
 
 FW_FILE1 = ../bin/eagle.flash.bin
@@ -33,7 +33,7 @@ SUBDIRS=    \
 	user    \
 	mqtt	\
 	driver	\
-	oled
+	display
 
 endif # } PDIR
 
@@ -59,7 +59,7 @@ COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
 	driver/libdriver.a \
 	mqtt/libmqtt.a \
-	oled/liboled.a
+	display/libdisplay.a
 
 LINKFLAGS_eagle.app.v6 = \
 	-L$(SDK_PATH)/lib        \
