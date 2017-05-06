@@ -45,6 +45,29 @@ void oled_write_data(unsigned char data)
 	i2c_master_stop();
 }
 
+void oled_write_data_n(unsigned char *data, unsigned char length)
+{
+	unsigned char ack = 0;
+
+	i2c_master_start();
+
+	i2c_master_writeByte(SSD1306_address << 1);
+
+	ack = i2c_master_checkAck();
+
+	i2c_master_writeByte(0x40);
+
+	ack = i2c_master_checkAck();
+
+	unsigned char i;
+	for(i = 0; i < length; i++) {
+		i2c_master_writeByte(data[i]);
+		ack = i2c_master_checkAck();
+	}
+
+	i2c_master_stop();
+}
+
 void oled_init(void) {
 	i2c_master_gpio_init();
 	i2c_master_init();
@@ -130,9 +153,7 @@ void oled_update() {
 	for(line = 0; line < 8; line++) {
 		oled_goto_x_y(0, line);
 
-		for(width = 0; width < SSD1306_LCDWIDTH; width++) {
-			oled_write_data(SSD1306_buffer[(SSD1306_LCDWIDTH * line) + width]);
-		}
+		oled_write_data_n(&SSD1306_buffer[SSD1306_LCDWIDTH * line], SSD1306_LCDWIDTH);
 	}
 }
 
@@ -141,14 +162,11 @@ void oled_drawpixel(uint8_t x, uint8_t y, uint8_t bit) {
 		return;
 	}
 
-	printf("Draw Pixel at X %d, Y %d %X\n", x, y, bit);
-
 	if(bit == true) {
 		SSD1306_buffer[x + (y/8) * SSD1306_LCDWIDTH] |= 1 << (y % 8);
 	} else {
 		SSD1306_buffer[x + (y/8) * SSD1306_LCDWIDTH] &= ~(1 << (y % 8));
 	}
 }
-
 
 /* end-of-file-found */

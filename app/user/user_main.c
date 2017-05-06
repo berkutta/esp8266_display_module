@@ -1,6 +1,6 @@
 #include "esp_common.h"
 #include "user_config.h"
-//#include "../display/display.h"
+#include "../display/display.h"
 
 uint32 user_rf_cal_sector_set(void)
 {
@@ -43,7 +43,7 @@ void ICACHE_FLASH_ATTR wifi_event_handler_cb(System_Event_t *event)
             printf("Disconnected!\n");
             break;
         case EVENT_STAMODE_CONNECTED:
-            //myoledstatus = oled_display_cloud;
+            myoledstatus = oled_display_cloud;
             printf("Connected!\n");
             break;
         case EVENT_STAMODE_GOT_IP:
