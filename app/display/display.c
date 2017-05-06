@@ -47,13 +47,21 @@ LOCAL void display_task(void *pvParameters)
 				break;
 		}
 
+    //graphic_clear();
+    //graphic_line(0, 0, 127, 63);
+    //graphic_line(0, 63, 127, 0);
+    //graphic_line(31, 31, 95, 31);
+    //graphic_line(63, 0, 63, 63);
+    //graphic_circle(63, 31, 32);
+    //graphic_rectangle(0, 0, 127, 63);
+    //graphic_puts_5x7(20, 40, "Hello World!");
     graphic_update();
 
 		vTaskDelay(100 / portTICK_RATE_MS);
 	}
 
 	vTaskDelete(NULL);
-	printf("delete the json_task\n");
+	printf("delete the display_task\n");
 }
 
 void display_start(void)
