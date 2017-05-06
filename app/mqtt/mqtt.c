@@ -212,7 +212,7 @@ LOCAL void mqtt_task(void *pvParameters)
 	sprintf(mac_string, "%X:%X:%X:%X:%X:%X", mac[5], mac[4], mac[3], mac[2], mac[1], mac[0]);
 	sprintf(topic, "esp/%s", mac_string);
 
-	connectMessage[17] = mac[0];
+	connectMessage[17] = mac[5];
 
 	mqtt_create_socket();
 	mqtt_connect();
