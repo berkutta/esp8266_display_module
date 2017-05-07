@@ -10,6 +10,8 @@
 
 #include "mqtt.h"
 
+#include "../display/display.h"
+
 int socket_desc;
 struct sockaddr_in server;
 
@@ -136,6 +138,17 @@ void mqtt_receive(void) {
 
       case PUBLISH:
         printf("Publish\n");
+				uint8_t remaining_length = buffer[1];
+				uint16_t topic_length = buffer[2] << 16;
+				topic_length |= buffer[3];
+				uint8_t payload[50];
+				memcpy(payload, buffer + topic_length + 3, remaining_length - (2+topic_length));
+				payload[remaining_length - (2+topic_length) + 1] = '\0';
+
+				strcpy(mytext, payload);
+
+				printf("%s", mytext);
+
         break;
 
       case PUBACK:
@@ -182,11 +195,6 @@ void mqtt_receive(void) {
         printf("Disconnect\n");
         break;
     }
-
-    if((buffer[0] & 0b00110000) == 0x30) {
-      printf("Received PUBLISH mess hallo\n");
-    }
-
 	}
 }
 

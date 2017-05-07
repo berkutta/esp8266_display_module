@@ -42,6 +42,7 @@ LOCAL void display_task(void *pvParameters)
 			case oled_display_cloud:
 				graphic_show_image(&cloud);
         graphic_puts_5x7(35, 45, "Connected!");
+        graphic_puts_5x7(35, 25, mytext);
 				break;
 
 			case oled_display_chip:
