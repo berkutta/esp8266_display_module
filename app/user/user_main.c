@@ -1,6 +1,7 @@
 #include "esp_common.h"
 #include "user_config.h"
 #include "../display/display.h"
+#include "../parameterisation/parameterisation.h"
 
 uint32 user_rf_cal_sector_set(void)
 {
@@ -65,13 +66,15 @@ void user_init(void)
 
     wifi_set_opmode(STATION_MODE);
 
-    wifi_set_event_handler_cb(wifi_event_handler_cb);
+    parameterisation_start();
 
-    struct station_config config;
-    memset(&config, 0, sizeof(struct station_config));
-    strcpy(config.ssid, myssid);
-    strcpy(config.password, mypassword);
-    wifi_station_set_config(&config);
+    //wifi_set_event_handler_cb(wifi_event_handler_cb);
 
-    wifi_station_connect();
+    //struct station_config config;
+    //memset(&config, 0, sizeof(struct station_config));
+    //strcpy(config.ssid, myssid);
+    //strcpy(config.password, mypassword);
+    //wifi_station_set_config(&config);
+
+    //wifi_station_connect();
 }

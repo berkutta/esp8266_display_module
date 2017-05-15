@@ -33,7 +33,8 @@ SUBDIRS=    \
 	user    \
 	mqtt	\
 	driver	\
-	display
+	display \
+	parameterisation
 
 endif # } PDIR
 
@@ -59,7 +60,8 @@ COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
 	driver/libdriver.a \
 	mqtt/libmqtt.a \
-	display/libdisplay.a
+	display/libdisplay.a \
+	parameterisation/libparameterisation.a
 
 LINKFLAGS_eagle.app.v6 = \
 	-L$(SDK_PATH)/lib        \
