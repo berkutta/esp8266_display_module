@@ -21,7 +21,7 @@ LOCAL void display_task(void *pvParameters)
 	while (1) {
 		static int counter;
 
-		myoledstatus = oled_display_tindie;
+		myoledstatus = oled_connecting_wifi;
 
 		switch(myoledstatus) {
 			case oled_connecting_wifi:
