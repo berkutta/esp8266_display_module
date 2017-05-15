@@ -61,8 +61,6 @@ void user_init(void)
 
     os_printf("SDK version:%s\n", system_get_sdk_version());
 
-    //myoledstatus = oled_connecting_wifi;
-    //oled_start();
     display_start();
 
     wifi_set_opmode(STATION_MODE);

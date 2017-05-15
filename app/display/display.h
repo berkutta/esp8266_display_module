@@ -5,6 +5,8 @@ typedef enum oled_status {
   oled_connecting_wifi,
   oled_display_cloud,
   oled_display_chip,
+  oled_display_wirecube,
+  oled_display_tindie,
 } oled_status_t;
 
 oled_status_t myoledstatus;

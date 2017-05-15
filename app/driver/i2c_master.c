@@ -51,7 +51,7 @@ i2c_master_setDC(uint8 SDA, uint8 SCL)
     SCL	&= 0x01;
     m_nLastSDA = SDA;
     m_nLastSCL = SCL;
-    ETS_INTR_LOCK();
+    // ETS_INTR_LOCK();
     if ((0 == SDA) && (0 == SCL)) {
       GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, (1 << I2C_MASTER_SDA_GPIO) | (1 << I2C_MASTER_SCL_GPIO) );
     } else if ((0 == SDA) && (1 == SCL)) {
@@ -63,7 +63,7 @@ i2c_master_setDC(uint8 SDA, uint8 SCL)
     } else {
       GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, (1 << I2C_MASTER_SDA_GPIO) | (1 << I2C_MASTER_SCL_GPIO) );
     }
-    ETS_INTR_UNLOCK();
+    // ETS_INTR_UNLOCK();
 }
 
 /******************************************************************************
