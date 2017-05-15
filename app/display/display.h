@@ -13,4 +13,6 @@ oled_status_t myoledstatus;
 
 uint8_t mytext[20];
 
+#define tindie_buyer "David Longley"
+
 #endif

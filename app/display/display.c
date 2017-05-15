@@ -18,10 +18,16 @@ LOCAL void display_task(void *pvParameters)
 	uint8_t ms;
 	float fps;
 
+	#ifdef tindie_buyer
+	myoledstatus = oled_display_wirecube;
+	#endif	
+
+	#ifndef tindie_buyer
+	myoledstatus = oled_connecting_wifi;
+	#endif
+
 	while (1) {
 		static int counter;
-
-		myoledstatus = oled_connecting_wifi;
 
 		switch(myoledstatus) {
 			case oled_connecting_wifi:
@@ -72,9 +78,11 @@ LOCAL void display_task(void *pvParameters)
 			wifi_get_macaddr(0x00, mac);
 			sprintf(mac_string, "%X:%X:%X:%X:%X:%X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
+			#ifdef tindie_buyer
 			graphic_puts_5x7(5, 35, "No WiFi");
 			graphic_puts_5x7(5, 45, mac_string);
-			graphic_puts_5x7(5, 55, "John Doe");
+			graphic_puts_5x7(5, 55, tindie_buyer);
+			#endif
 
 			break;
 

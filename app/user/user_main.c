@@ -66,7 +66,7 @@ void user_init(void)
 
     wifi_set_opmode(STATION_MODE);
 
-    parameterisation_start();
+    //parameterisation_start();
 
     //wifi_set_event_handler_cb(wifi_event_handler_cb);
 

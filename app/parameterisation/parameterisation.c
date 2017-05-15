@@ -49,22 +49,22 @@ void parameterisation_task(void *pvParameters) {
         if(wifi_station_get_connect_status() == STATION_GOT_IP) {
             printf("Got a damned IP!!\n");
 
-            socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-            if (socket_desc == -1)
-            {
-                printf("Could not create socket");
-            }
+            //socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+            //if (socket_desc == -1)
+            //{
+            //    printf("Could not create socket");
+            //}
 
-            server.sin_addr.s_addr = inet_addr(MQTT_SERVER);
-            server.sin_family = AF_INET;
-            server.sin_port = htons( 1883 );
+            //server.sin_addr.s_addr = inet_addr(MQTT_SERVER);
+            //server.sin_family = AF_INET;
+            //server.sin_port = htons( 1883 );
 
             //Connect to remote server
-            if (connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0)
-            {
-                puts("Error on socket for HTTP Server");
-                return;
-            }
+            //if (connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0)
+            //{
+            //    puts("Error on socket for HTTP Server");
+            //    return;
+            //}
 
         }
         vTaskDelay(100 / portTICK_RATE_MS);
