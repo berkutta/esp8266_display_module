@@ -64,17 +64,17 @@ void user_init(void)
 
     display_start();
 
-    wifi_set_opmode(STATION_MODE);
+    wifi_set_event_handler_cb(wifi_event_handler_cb);
 
-    //parameterisation_start();
+    #ifdef tindie_mode
+    wifi_set_opmode(SOFTAP_MODE);
 
-    //wifi_set_event_handler_cb(wifi_event_handler_cb);
+    myoledstatus = oled_display_tindie_logo;
 
-    //struct station_config config;
-    //memset(&config, 0, sizeof(struct station_config));
-    //strcpy(config.ssid, myssid);
-    //strcpy(config.password, mypassword);
-    //wifi_station_set_config(&config);
+    vTaskDelay(2500 / portTICK_RATE_MS);
 
-    //wifi_station_connect();
+    myoledstatus = oled_display_tindie_wirecube;
+    #else
+    myoledstatus = oled_display_wirecube;
+    #endif
 }

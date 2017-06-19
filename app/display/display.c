@@ -18,14 +18,6 @@ LOCAL void display_task(void *pvParameters)
 	uint8_t ms;
 	float fps;
 
-	#ifdef tindie_buyer
-	myoledstatus = oled_display_wirecube;
-	#endif	
-
-	#ifndef tindie_buyer
-	myoledstatus = oled_connecting_wifi;
-	#endif
-
 	while (1) {
 		static int counter;
 
@@ -69,20 +61,8 @@ LOCAL void display_task(void *pvParameters)
 			graphic_clear();
 			graphic_puts_5x7(75, 5, myuptime_string);
 			last_system_time = system_get_time();
-			//PIX=GREEN; // colours of all lines drawn will be green until changed.
-
 
 			wirecube_render();
-			uint8_t mac[6];
-			char mac_string[17];
-			wifi_get_macaddr(0x00, mac);
-			sprintf(mac_string, "%X:%X:%X:%X:%X:%X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-
-			#ifdef tindie_buyer
-			graphic_puts_5x7(5, 35, "No WiFi");
-			graphic_puts_5x7(5, 45, mac_string);
-			graphic_puts_5x7(5, 55, tindie_buyer);
-			#endif
 
 			break;
 
@@ -90,8 +70,30 @@ LOCAL void display_task(void *pvParameters)
 			graphic_show_image(&chip);
 			break;
 
-		case oled_display_tindie:
+		case oled_display_tindie_logo:
 			graphic_show_image(&tindie);
+			break;
+
+		case oled_display_tindie_wirecube:
+			ms = ( ( system_get_time() - last_system_time) / 1000 );
+			fps = (float)((float)1 / ((float)ms*(float)0.001));
+
+			sprintf(myuptime_string, "%.2f FPS", fps);
+			graphic_clear();
+			graphic_puts_5x7(75, 5, myuptime_string);
+			last_system_time = system_get_time();
+
+
+			wirecube_render();
+
+			uint8_t mac[6];
+			char mac_string[17];
+			wifi_get_macaddr(0x00, mac);
+			sprintf(mac_string, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+			graphic_puts_5x7(5, 45, "Softap WiFi");
+			graphic_puts_5x7(5, 55, mac_string);
+
 			break;
 	}
 
