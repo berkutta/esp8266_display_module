@@ -5,7 +5,9 @@
 
 #include "images.c"
 #include "graphic.h"
+
 #include "wirecube.h"
+#include "oscilloscope.h"
 
 LOCAL void display_task(void *pvParameters)
 {
@@ -68,6 +70,10 @@ LOCAL void display_task(void *pvParameters)
 
 		case oled_display_chip:
 			graphic_show_image(&chip);
+			break;
+		
+		case oled_display_oscilloscope:
+			oscilloscope_render();
 			break;
 
 		case oled_display_tindie_logo:

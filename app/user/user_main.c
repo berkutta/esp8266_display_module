@@ -75,6 +75,6 @@ void user_init(void)
 
     myoledstatus = oled_display_tindie_wirecube;
     #else
-    myoledstatus = oled_display_wirecube;
+    myoledstatus = oled_display_oscilloscope;
     #endif
 }

@@ -1,0 +1,1 @@
+void oscilloscope_render(void);
