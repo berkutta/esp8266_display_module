@@ -11,7 +11,7 @@ void oscilloscope_render(void) {
     uint32_t buffer;
     int i;
 
-    wifi_set_opmode(0);
+    //wifi_set_opmode(0);
 
     taskENTER_CRITICAL();
 
