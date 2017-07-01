@@ -44,16 +44,28 @@ void ICACHE_FLASH_ATTR wifi_event_handler_cb(System_Event_t *event)
             printf("Disconnected!\n");
             break;
         case EVENT_STAMODE_CONNECTED:
-            myoledstatus = oled_display_cloud;
+            //myoledstatus = oled_display_cloud;
             printf("Connected!\n");
             break;
         case EVENT_STAMODE_GOT_IP:
             printf("Got IP!\n");
-            mqtt_start();
+            //mqtt_start();
             break;
         default:
             break;
     }
+}
+
+void wifi_station_mode_init(void) {
+    wifi_set_opmode(STATION_MODE);
+
+    struct station_config config;
+    memset(&config, 0, sizeof(struct station_config));
+    strcpy(config.ssid, myssid);
+    strcpy(config.password, mypassword);
+    wifi_station_set_config(&config);
+
+    wifi_station_connect();
 }
 
 void user_init(void)
@@ -64,8 +76,6 @@ void user_init(void)
 
     display_start();
 
-    wifi_set_event_handler_cb(wifi_event_handler_cb);
-
     #ifdef tindie_mode
     wifi_set_opmode(SOFTAP_MODE);
 
@@ -75,6 +85,11 @@ void user_init(void)
 
     myoledstatus = oled_display_tindie_wirecube;
     #else
-    myoledstatus = oled_display_oscilloscope;
+
+    wifi_set_event_handler_cb(wifi_event_handler_cb);
+
+    wifi_station_mode_init();
+
+    myoledstatus = oled_display_gameoflife;
     #endif
 }
