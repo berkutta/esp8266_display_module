@@ -7,6 +7,7 @@
 #include "graphic.h"
 
 #include "wirecube.h"
+#include "gameoflife.h"
 #include "oscilloscope.h"
 
 LOCAL void display_task(void *pvParameters)
@@ -14,6 +15,7 @@ LOCAL void display_task(void *pvParameters)
 	graphic_init();
 
 	wirecube_init();
+	gameoflife_init();
 
 	uint32_t last_system_time;
 	uint8_t myuptime_string[10];
@@ -68,6 +70,13 @@ LOCAL void display_task(void *pvParameters)
 
 			break;
 
+		case oled_display_gameoflife:
+			graphic_clear();
+
+			gameoflife_render();
+
+			break;
+
 		case oled_display_chip:
 			graphic_show_image(&chip);
 			break;
@@ -78,6 +87,27 @@ LOCAL void display_task(void *pvParameters)
 
 		case oled_display_tindie_logo:
 			graphic_show_image(&tindie);
+			break;
+
+		case oled_display_tindie_gameoflife:
+			ms = ( ( system_get_time() - last_system_time) / 1000 );
+			fps = (float)((float)1 / ((float)ms*(float)0.001));
+
+			sprintf(myuptime_string, "%.2f FPS", fps);
+			graphic_clear();
+			graphic_puts_5x7(75, 5, myuptime_string);
+			last_system_time = system_get_time();
+
+			gameoflife_render();
+
+			uint8_t mac[6];
+			char mac_string[17];
+			wifi_get_macaddr(0x00, mac);
+			sprintf(mac_string, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+			graphic_puts_5x7(5, 45, "Softap WiFi");
+			graphic_puts_5x7(5, 55, mac_string);
+
 			break;
 
 		case oled_display_tindie_wirecube:
