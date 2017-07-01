@@ -3,6 +3,8 @@
 
 #include "gameoflife.h"
 
+// Ported from https://github.com/kodera2t/GoL/blob/master/UltraZERO_GoL.ino
+
 bool new_pix[128][64]; //new pixels
 bool current_pix[128][64]; //current pixels
 int counter=0;
