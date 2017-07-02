@@ -100,13 +100,13 @@ LOCAL void display_task(void *pvParameters)
 
 			gameoflife_render();
 
-			uint8_t mac[6];
-			char mac_string[17];
-			wifi_get_macaddr(0x00, mac);
-			sprintf(mac_string, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+			uint8_t mac1[6];
+			char mac_string1[17];
+			wifi_get_macaddr(0x00, mac1);
+			sprintf(mac_string1, "%02X:%02X:%02X:%02X:%02X:%02X", mac1[0], mac1[1], mac1[2], mac1[3], mac1[4], mac1[5]);
 
 			graphic_puts_5x7(5, 45, "Softap WiFi");
-			graphic_puts_5x7(5, 55, mac_string);
+			graphic_puts_5x7(5, 55, mac_string1);
 
 			break;
 
