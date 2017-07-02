@@ -3,6 +3,8 @@
 #include "../display/display.h"
 #include "../parameterisation/parameterisation.h"
 
+uint32_t saved_mode;
+
 uint32 user_rf_cal_sector_set(void)
 {
     flash_size_map size_map = system_get_flash_size_map();
@@ -83,7 +85,19 @@ void user_init(void)
 
     vTaskDelay(2500 / portTICK_RATE_MS);
 
-    myoledstatus = oled_display_tindie_wirecube;
+    spi_flash_read(0x70000, (uint32 *)&saved_mode, sizeof(saved_mode));
+
+    if(saved_mode == 1) {
+        myoledstatus = oled_display_tindie_wirecube;
+        saved_mode = 0;
+    } else {
+        myoledstatus = oled_display_tindie_gameoflife;
+        saved_mode = 1;
+    }
+
+    spi_flash_erase_sector(0x70);
+    spi_flash_write(0x70000, (uint32 *)&saved_mode, sizeof(saved_mode));
+    
     #else
 
     wifi_set_event_handler_cb(wifi_event_handler_cb);
